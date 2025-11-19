@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
       - name: nginx-webapp
-        image: ghcr.io/prasanthrajrp/nginx-webapp:latest
+        image: prasanthrajrp/nginx-webapp:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
