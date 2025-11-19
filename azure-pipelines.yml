@@ -1,0 +1,42 @@
+trigger:
+- main
+
+pool:
+  name: cluster-pool
+
+steps:
+- checkout: self
+
+# Login to GitHub Container Registry
+- task: Docker@2
+  displayName: Login to GHCR
+  inputs:
+    command: login
+    containerRegistry: ghcr-connection   # service connection name
+
+# Build Docker Image
+- task: Docker@2
+  displayName: Build Image
+  inputs:
+    command: build
+    Dockerfile: Dockerfile
+    repository: ghcr.io/prasanthrajrp/nginx-webapp
+    tags: |
+      latest
+      $(Build.BuildId)
+
+# Push Docker image to GHCR
+- task: Docker@2
+  displayName: Push Image
+  inputs:
+    command: push
+    repository: ghcr.io/prasanthrajrp/nginx-webapp
+    tags: |
+      latest
+      $(Build.BuildId)
+
+# Deploy to Kubernetes
+- script: |
+    kubectl apply -f k8s/deployment.yaml
+    kubectl apply -f k8s/service.yaml
+  displayName: Deploy to Kubernetes
