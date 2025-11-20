@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-webapp
+  name: sample-app
+  namespace: sample-app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: nginx-webapp
+      app: sample-app
   template:
     metadata:
       labels:
-        app: nginx-webapp
+        app: sample-app
     spec:
       containers:
-      - name: nginx-webapp
-        image: prasanthrajrp/nginx-webapp:latest
-        imagePullPolicy: Always
+      - name: sample-app
+        image: prasanthrajrp/sample-app:latest
         ports:
         - containerPort: 80
